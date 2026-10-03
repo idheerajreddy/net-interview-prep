@@ -1,6 +1,6 @@
 import type { DayRecord, Store } from "../types";
 
-const STORAGE_KEY = "net-drill-v1";
+const STORAGE_KEY = "net-drill-v2";
 
 export function dateKey(date: Date): string {
   const month = String(date.getMonth() + 1).padStart(2, "0");

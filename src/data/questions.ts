@@ -1,6 +1,7 @@
 import type { Question } from "../types";
+import { generatedQuestions } from "./generate";
 
-const questionBank: Question[] = [
+const handcrafted: Question[] = [
   {
     id: "e-osi-ip",
     topic: "Layering",
@@ -1128,6 +1129,8 @@ const questionBank: Question[] = [
       "This is a routed fabric. The interface going down removes that adjacency and that ECMP next hop immediately. Leaf 1 still has Spine B, so traffic shifts there: Server A → Leaf 1 → Spine B → Leaf 3 → Server B. There is no spanning tree on these point-to-point routed links, so nothing is waiting on STP.\n\nContrast this with a link that stays up and silently drops. That case does wait on a hold timer or on BFD. The interface state is the whole difference.",
   },
 ];
+
+const questionBank: Question[] = [...handcrafted, ...generatedQuestions(handcrafted)];
 
 function hashString(value: string): number {
   let hash = 2166136261;

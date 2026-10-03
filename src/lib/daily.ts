@@ -75,7 +75,7 @@ function deal(all: Question[], perDay: number, seed: number): Question[][] {
 }
 
 function balanceDiagrams(schedule: Question[][]) {
-  let guard = 200;
+  let guard = 5000;
   while (guard > 0) {
     guard -= 1;
     const needy = schedule.findIndex((set) => diagramCount(set) < 2);

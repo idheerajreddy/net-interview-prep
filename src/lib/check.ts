@@ -11,9 +11,12 @@ function fail(message: string) {
 }
 
 const ids = new Set<string>();
+const prompts = new Set<string>();
 for (const question of questions) {
   if (ids.has(question.id)) fail(`duplicate id ${question.id}`);
   ids.add(question.id);
+  if (prompts.has(question.prompt)) fail(`duplicate prompt on ${question.id}`);
+  prompts.add(question.prompt);
   if (question.choices.length !== 4) fail(`${question.id} does not have 4 choices`);
   if (!question.choices.some((choice) => choice.id === question.answer)) {
     fail(`${question.id} answer is not one of the choices`);
@@ -35,13 +38,14 @@ for (const [letter, count] of Object.entries(answerCounts)) {
   if (count < 12) fail(`answer ${letter} only appears ${count} times`);
 }
 
+const expected = { easy: 300, medium: 400, hard: 300 } as const;
 for (const difficulty of difficulties) {
   const count = questions.filter((question) => question.difficulty === difficulty).length;
-  const expected = difficulty === "medium" ? 24 : 18;
-  if (count !== expected) fail(`${difficulty} count is ${count}, expected ${expected}`);
+  if (count !== expected[difficulty]) fail(`${difficulty} count is ${count}, expected ${expected[difficulty]}`);
 }
 
-if (schedule.length !== 6) fail(`cycle is ${schedule.length}, expected 6`);
+if (questions.length !== 1000) fail(`bank is ${questions.length}, expected 1000`);
+if (schedule.length !== 100) fail(`cycle is ${schedule.length}, expected 100`);
 
 const seen = new Map<string, number>();
 for (let slot = 0; slot < schedule.length; slot += 1) {
@@ -60,10 +64,10 @@ for (let slot = 0; slot < schedule.length; slot += 1) {
   }
 }
 
-if (seen.size !== 60) fail(`scheduled ${seen.size} questions, expected 60`);
+if (seen.size !== 1000) fail(`scheduled ${seen.size} questions, expected 1000`);
 
 function dateForSlot(slot: number) {
-  for (let offset = 0; offset < 40; offset += 1) {
+  for (let offset = 0; offset < schedule.length + 2; offset += 1) {
     const date = new Date(2026, 0, 1 + offset);
     if (dayNumber(date) % schedule.length === slot) return date;
   }
